@@ -50,10 +50,21 @@ export function CopilotCard({
   const [showRisks, setShowRisks] = useState(true);
   const [showEvidence, setShowEvidence] = useState(false);
 
-  const isHold = proposal.action === 'HOLD';
+  // Check if this is a HOLD recommendation (case-insensitive, or quantity is 0)
+  const isHold = proposal.action.toUpperCase() === 'HOLD' || proposal.quantity === 0;
   const potentialProfit = proposal.target_price - proposal.entry_price;
   const potentialLoss = proposal.entry_price - proposal.stop_loss;
   const riskRewardRatio = !isHold && potentialLoss !== 0 ? potentialProfit / potentialLoss : 0;
+
+  // Debug log
+  console.log('📊 CopilotCard render:', {
+    action: proposal.action,
+    quantity: proposal.quantity,
+    isHold,
+    entry: proposal.entry_price,
+    target: proposal.target_price,
+    stopLoss: proposal.stop_loss
+  });
 
   const confidenceColor = proposal.confidence >= 0.7 ? 'text-green-500' : proposal.confidence >= 0.5 ? 'text-yellow-500' : 'text-red-500';
   const confidenceBg = proposal.confidence >= 0.7 ? 'bg-green-500/20' : proposal.confidence >= 0.5 ? 'bg-yellow-500/20' : 'bg-red-500/20';
@@ -106,9 +117,12 @@ export function CopilotCard({
 
         {/* HOLD Message */}
         {isHold && (
-          <div className="mt-4 p-4 bg-muted/30 rounded-lg border border-muted">
-            <p className="text-sm text-muted-foreground">
-              ⚠️ No trade recommended. Market conditions or signals are not favorable for entry at this time.
+          <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+            <p className="text-sm font-medium text-yellow-900 dark:text-yellow-200 mb-1">
+              ⚠️ No Trade Recommended
+            </p>
+            <p className="text-sm text-yellow-800 dark:text-yellow-300">
+              Market conditions or technical signals are not favorable for entry at this time. Continue monitoring for better opportunities.
             </p>
           </div>
         )}
@@ -224,9 +238,10 @@ export function CopilotCard({
       </div>
 
       {/* Footer - Action Buttons */}
-      <div className="p-6 pt-0 flex gap-3">
+      <div className="p-6 pt-0">
         {!isHold ? (
-          <>
+          // BUY/SELL: Show Approve + Reject buttons
+          <div className="flex gap-3">
             <Button
               onClick={onApprove}
               disabled={isProcessing}
@@ -257,17 +272,23 @@ export function CopilotCard({
               <X className="w-5 h-5 mr-2" />
               Reject
             </Button>
-          </>
+          </div>
         ) : (
-          <Button
-            onClick={onReject}
-            variant="default"
-            size="lg"
-            className="flex-1"
-          >
-            <CheckCircle className="w-5 h-5 mr-2" />
-            Acknowledge
-          </Button>
+          // HOLD: Just acknowledge the analysis
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground text-center">
+              This is analysis only - no action required.
+            </p>
+            <Button
+              onClick={onReject}
+              variant="default"
+              size="lg"
+              className="w-full"
+            >
+              <CheckCircle className="w-5 h-5 mr-2" />
+              Acknowledge
+            </Button>
+          </div>
         )}
       </div>
     </div>

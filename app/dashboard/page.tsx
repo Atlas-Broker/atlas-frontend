@@ -131,10 +131,19 @@ export default function DashboardPage() {
   };
 
   const handleApprove = async () => {
-    if (!currentProposal?.orderId) return;
+    if (!currentProposal?.orderId) {
+      console.error('❌ No orderId found in proposal:', currentProposal);
+      showToast({
+        title: 'Cannot Approve',
+        description: 'No order ID found. This might be a HOLD recommendation.',
+        variant: 'destructive'
+      });
+      return;
+    }
 
     try {
       setIsProcessing(true);
+      console.log('🔄 Approving order:', currentProposal.orderId);
 
       const response = await fetch('/api/agent/approve-trade', {
         method: 'POST',
@@ -142,7 +151,10 @@ export default function DashboardPage() {
         body: JSON.stringify({ orderId: currentProposal.orderId })
       });
 
+      console.log('📡 Approve response status:', response.status);
+
       const data = await response.json();
+      console.log('📡 Approve response data:', data);
 
       if (!response.ok) {
         throw new Error(data.error || 'Approval failed');
@@ -160,7 +172,7 @@ export default function DashboardPage() {
       await fetchRecentDecisions();
 
     } catch (error) {
-      console.error('Approve error:', error);
+      console.error('❌ Approve error:', error);
       showToast({
         title: 'Approval Failed',
         description: error instanceof Error ? error.message : 'Unknown error',
@@ -172,10 +184,14 @@ export default function DashboardPage() {
   };
 
   const handleReject = async () => {
-    if (!currentProposal) return;
+    if (!currentProposal) {
+      console.error('❌ No proposal found');
+      return;
+    }
 
     // For HOLD recommendations (no orderId), just clear the proposal
     if (!currentProposal.orderId) {
+      console.log('ℹ️ HOLD recommendation - clearing without API call');
       showToast({
         title: 'Acknowledged',
         description: `Analysis for ${currentProposal.proposal.symbol} has been acknowledged`,
@@ -190,6 +206,7 @@ export default function DashboardPage() {
     // For actual trade proposals (BUY/SELL with orderId), reject via API
     try {
       setIsProcessing(true);
+      console.log('🔄 Rejecting order:', currentProposal.orderId);
 
       const response = await fetch('/api/agent/approve-trade', {
         method: 'DELETE',
@@ -197,7 +214,10 @@ export default function DashboardPage() {
         body: JSON.stringify({ orderId: currentProposal.orderId })
       });
 
+      console.log('📡 Reject response status:', response.status);
+
       const data = await response.json();
+      console.log('📡 Reject response data:', data);
 
       if (!response.ok) {
         throw new Error(data.error || 'Rejection failed');
@@ -215,7 +235,7 @@ export default function DashboardPage() {
       await fetchRecentDecisions();
 
     } catch (error) {
-      console.error('Reject error:', error);
+      console.error('❌ Reject error:', error);
       showToast({
         title: 'Rejection Failed',
         description: error instanceof Error ? error.message : 'Unknown error',

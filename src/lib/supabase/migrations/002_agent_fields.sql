@@ -12,7 +12,7 @@ ADD COLUMN IF NOT EXISTS reasoning_summary TEXT, -- Human-readable summary of ag
 ADD COLUMN IF NOT EXISTS evidence_links TEXT[], -- Array of URLs agent referenced
 ADD COLUMN IF NOT EXISTS proposed_at TIMESTAMP WITH TIME ZONE, -- When agent proposed the trade
 ADD COLUMN IF NOT EXISTS approved_at TIMESTAMP WITH TIME ZONE, -- When human approved
-ADD COLUMN IF NOT EXISTS approved_by TEXT REFERENCES profiles(id); -- Who approved (for multi-user later)
+ADD COLUMN IF NOT EXISTS approved_by UUID REFERENCES profiles(id); -- Who approved (for multi-user later)
 
 -- Create index on agent_run_id for fast lookups
 CREATE INDEX IF NOT EXISTS idx_orders_agent_run_id ON orders(agent_run_id);

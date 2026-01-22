@@ -172,8 +172,22 @@ export default function DashboardPage() {
   };
 
   const handleReject = async () => {
-    if (!currentProposal?.orderId) return;
+    if (!currentProposal) return;
 
+    // For HOLD recommendations (no orderId), just clear the proposal
+    if (!currentProposal.orderId) {
+      showToast({
+        title: 'Acknowledged',
+        description: `Analysis for ${currentProposal.proposal.symbol} has been acknowledged`,
+        variant: 'default'
+      });
+
+      setCurrentProposal(null);
+      setAgentStatus('IDLE');
+      return;
+    }
+
+    // For actual trade proposals (BUY/SELL with orderId), reject via API
     try {
       setIsProcessing(true);
 

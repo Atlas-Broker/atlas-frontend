@@ -70,8 +70,14 @@ export async function POST(request: NextRequest) {
       // Don't fail the request if MongoDB save fails
     }
 
-    // Step 5: If agent proposed a trade, create order in Supabase
-    if (agentResult.proposal && agentResult.status === 'COMPLETED') {
+    // Step 5: If agent proposed a BUY/SELL trade, create order in Supabase
+    // HOLD recommendations don't create orders - they're just analysis results
+    const proposal = agentResult.proposal;
+    const isActionableTrade = proposal && 
+                              agentResult.status === 'COMPLETED' &&
+                              (proposal.action === 'BUY' || proposal.action === 'SELL');
+
+    if (isActionableTrade && proposal) {
       try {
         const supabase = getSupabaseAdmin();
         
@@ -95,16 +101,16 @@ export async function POST(request: NextRequest) {
           .from('orders')
           .insert({
             user_id: profile.id,
-            symbol: agentResult.proposal.symbol,
-            side: agentResult.proposal.action.toLowerCase() as 'buy' | 'sell',
-            quantity: agentResult.proposal.quantity,
+            symbol: proposal.symbol,
+            side: proposal.action.toLowerCase() as 'buy' | 'sell',
+            quantity: proposal.quantity,
             order_type: 'limit',
-            limit_price: agentResult.proposal.entry_price,
-            stop_price: agentResult.proposal.stop_loss,
+            limit_price: proposal.entry_price,
+            stop_price: proposal.stop_loss,
             status: 'proposed',
             environment: 'paper',
             agent_run_id: agentResult.runId,
-            confidence_score: agentResult.proposal.confidence,
+            confidence_score: proposal.confidence,
             reasoning_summary: agentResult.reasoning.trend_analysis,
             evidence_links: agentResult.evidence_links,
             proposed_at: new Date().toISOString()
@@ -119,17 +125,18 @@ export async function POST(request: NextRequest) {
 
         console.log(`✅ Order created in Supabase: ${order.id}`);
 
-        // Create audit log
+        // Create audit log for trade proposal
         await supabase.from('audit_logs').insert({
           user_id: profile.id,
-          action: 'agent_analysis_requested',
-          resource_type: 'agent_run',
-          resource_id: agentResult.runId,
+          action: 'trade_proposed',
+          resource_type: 'order',
+          resource_id: order.id,
           metadata: {
             intent,
-            symbol: agentResult.proposal.symbol,
-            action: agentResult.proposal.action,
-            confidence: agentResult.proposal.confidence
+            agent_run_id: agentResult.runId,
+            symbol: proposal.symbol,
+            action: proposal.action,
+            confidence: proposal.confidence
           }
         });
 
@@ -139,7 +146,7 @@ export async function POST(request: NextRequest) {
           runId: agentResult.runId,
           status: agentResult.status,
           reasoning: agentResult.reasoning,
-          proposal: agentResult.proposal,
+          proposal: proposal,
           evidence_links: agentResult.evidence_links,
           orderId: order.id,
           processing_time_ms: Date.now() - startTime
@@ -153,13 +160,44 @@ export async function POST(request: NextRequest) {
         );
       }
     } else {
-      // Agent didn't propose a trade (HOLD recommendation or error)
+      // Agent returned HOLD recommendation or analysis only
+      console.log(`ℹ️ No actionable trade - returning analysis only (action: ${proposal?.action || 'none'})`);
+      
+      // Still create audit log for analysis request
+      if (proposal) {
+        try {
+          const supabase = getSupabaseAdmin();
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('clerk_id', userId)
+            .single();
+
+          if (profile) {
+            await supabase.from('audit_logs').insert({
+              user_id: profile.id,
+              action: 'agent_analysis_requested',
+              resource_type: 'agent_run',
+              resource_id: agentResult.runId,
+              metadata: {
+                intent,
+                symbol: proposal.symbol,
+                action: proposal.action,
+                confidence: proposal.confidence
+              }
+            });
+          }
+        } catch (auditError) {
+          console.error('⚠️ Failed to create audit log (non-critical):', auditError);
+        }
+      }
+
       return NextResponse.json({
         success: true,
         runId: agentResult.runId,
         status: agentResult.status,
         reasoning: agentResult.reasoning,
-        proposal: agentResult.proposal,
+        proposal: proposal,
         evidence_links: agentResult.evidence_links,
         error: agentResult.error,
         processing_time_ms: Date.now() - startTime

@@ -105,17 +105,19 @@ export async function runOrchestratorAgent(input: OrchestratorInput): Promise<Or
     const agentResponse = result.response.text();
 
     console.log(`✅ [${runId}] Gemini response received`);
+    console.log(`📝 [${runId}] Raw response preview:`, agentResponse.substring(0, 500));
 
     // Step 6: Parse response into structured format
-    const parsed = parseAgentResponse(agentResponse, marketData, technicals);
+    const parsed = parseAgentResponse(agentResponse, symbol, marketData, technicals);
 
     const processingTime = Date.now() - startTime;
 
     console.log(`🎉 [${runId}] Agent run completed in ${processingTime}ms`);
+    console.log(`📊 [${runId}] Proposal action: ${parsed.proposal?.action || 'NONE'}`);
 
     return {
       runId,
-      status: parsed.proposal ? 'COMPLETED' : 'PROPOSING',
+      status: 'COMPLETED', // Always mark as completed if we got this far
       reasoning: parsed.reasoning,
       proposal: parsed.proposal,
       evidence_links: evidenceLinks,
@@ -158,6 +160,7 @@ export async function runOrchestratorAgent(input: OrchestratorInput): Promise<Or
  */
 function parseAgentResponse(
   response: string,
+  symbol: string,
   marketData: Record<string, unknown>,
   technicals: {
     technical_signals: string[];
@@ -181,6 +184,8 @@ function parseAgentResponse(
   const actionMatch = response.match(/Action:\s*(BUY|SELL|HOLD)/i);
   const action = actionMatch ? (actionMatch[1].toUpperCase() as 'BUY' | 'SELL' | 'HOLD') : 'HOLD';
 
+  console.log(`🎯 Parsed action from response: ${action}`);
+
   // Extract confidence (look for percentage or decimal)
   const confidenceMatch = response.match(/Confidence:\s*(\d+(?:\.\d+)?)/i);
   const confidence = confidenceMatch ? parseFloat(confidenceMatch[1]) : 0.5;
@@ -190,22 +195,19 @@ function parseAgentResponse(
   const quantityMatch = response.match(/Quantity:\s*(\d+)/i);
   const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 10;
 
-  // Only create proposal if action is BUY or SELL
-  let proposal: TradeProposal | undefined;
-  if (action === 'BUY' || action === 'SELL') {
-    const currentPrice = typeof marketData.current_price === 'number' ? marketData.current_price : 100;
+  // Always create a proposal (BUY, SELL, or HOLD)
+  const currentPrice = typeof marketData.current_price === 'number' ? marketData.current_price : 100;
 
-    proposal = {
-      action,
-      symbol: typeof marketData.symbol === 'string' ? marketData.symbol : 'UNKNOWN',
-      quantity,
-      entry_price: currentPrice,
-      stop_loss: action === 'BUY' ? currentPrice * 0.95 : currentPrice * 1.05,
-      target_price: action === 'BUY' ? currentPrice * 1.1 : currentPrice * 0.9,
-      confidence: normalizedConfidence,
-      holding_window: '3-7 days',
-    };
-  }
+  const proposal: TradeProposal = {
+    action,
+    symbol: symbol.toUpperCase(), // Use the symbol we already extracted
+    quantity: action === 'HOLD' ? 0 : quantity, // 0 quantity for HOLD
+    entry_price: currentPrice,
+    stop_loss: action === 'BUY' ? currentPrice * 0.95 : action === 'SELL' ? currentPrice * 1.05 : currentPrice,
+    target_price: action === 'BUY' ? currentPrice * 1.1 : action === 'SELL' ? currentPrice * 0.9 : currentPrice,
+    confidence: normalizedConfidence,
+    holding_window: action === 'HOLD' ? 'N/A' : '3-7 days',
+  };
 
   return { reasoning, proposal };
 }

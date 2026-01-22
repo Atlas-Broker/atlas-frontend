@@ -50,17 +50,18 @@ export function CopilotCard({
   const [showRisks, setShowRisks] = useState(true);
   const [showEvidence, setShowEvidence] = useState(false);
 
+  const isHold = proposal.action === 'HOLD';
   const potentialProfit = proposal.target_price - proposal.entry_price;
   const potentialLoss = proposal.entry_price - proposal.stop_loss;
-  const riskRewardRatio = potentialProfit / potentialLoss;
+  const riskRewardRatio = !isHold && potentialLoss !== 0 ? potentialProfit / potentialLoss : 0;
 
   const confidenceColor = proposal.confidence >= 0.7 ? 'text-green-500' : proposal.confidence >= 0.5 ? 'text-yellow-500' : 'text-red-500';
   const confidenceBg = proposal.confidence >= 0.7 ? 'bg-green-500/20' : proposal.confidence >= 0.5 ? 'bg-yellow-500/20' : 'bg-red-500/20';
 
   return (
-    <div className="glass-card border-2 border-primary/30 rounded-2xl overflow-hidden shadow-xl">
+    <div className={`glass-card border-2 rounded-2xl overflow-hidden shadow-xl ${isHold ? 'border-muted/30' : 'border-primary/30'}`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 p-6 border-b border-primary/20">
+      <div className={`p-6 border-b ${isHold ? 'bg-muted/20 border-muted/20' : 'bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border-primary/20'}`}>
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -70,7 +71,7 @@ export function CopilotCard({
               </Badge>
             </div>
             <p className="text-muted-foreground">
-              {proposal.quantity} shares @ {formatCurrency(proposal.entry_price)}
+              {isHold ? `Current price: ${formatCurrency(proposal.entry_price)}` : `${proposal.quantity} shares @ ${formatCurrency(proposal.entry_price)}`}
             </p>
           </div>
 
@@ -81,25 +82,36 @@ export function CopilotCard({
           </div>
         </div>
 
-        {/* Trade Details Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          <div className="bg-background/50 rounded-lg p-3">
-            <div className="text-sm text-muted-foreground">Entry</div>
-            <div className="text-lg font-semibold">{formatCurrency(proposal.entry_price)}</div>
+        {/* Trade Details Grid (only for BUY/SELL) */}
+        {!isHold && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div className="bg-background/50 rounded-lg p-3">
+              <div className="text-sm text-muted-foreground">Entry</div>
+              <div className="text-lg font-semibold">{formatCurrency(proposal.entry_price)}</div>
+            </div>
+            <div className="bg-background/50 rounded-lg p-3">
+              <div className="text-sm text-muted-foreground">Target</div>
+              <div className="text-lg font-semibold text-green-500">{formatCurrency(proposal.target_price)}</div>
+            </div>
+            <div className="bg-background/50 rounded-lg p-3">
+              <div className="text-sm text-muted-foreground">Stop Loss</div>
+              <div className="text-lg font-semibold text-red-500">{formatCurrency(proposal.stop_loss)}</div>
+            </div>
+            <div className="bg-background/50 rounded-lg p-3">
+              <div className="text-sm text-muted-foreground">R:R Ratio</div>
+              <div className="text-lg font-semibold">{riskRewardRatio.toFixed(2)}:1</div>
+            </div>
           </div>
-          <div className="bg-background/50 rounded-lg p-3">
-            <div className="text-sm text-muted-foreground">Target</div>
-            <div className="text-lg font-semibold text-green-500">{formatCurrency(proposal.target_price)}</div>
+        )}
+
+        {/* HOLD Message */}
+        {isHold && (
+          <div className="mt-4 p-4 bg-muted/30 rounded-lg border border-muted">
+            <p className="text-sm text-muted-foreground">
+              ⚠️ No trade recommended. Market conditions or signals are not favorable for entry at this time.
+            </p>
           </div>
-          <div className="bg-background/50 rounded-lg p-3">
-            <div className="text-sm text-muted-foreground">Stop Loss</div>
-            <div className="text-lg font-semibold text-red-500">{formatCurrency(proposal.stop_loss)}</div>
-          </div>
-          <div className="bg-background/50 rounded-lg p-3">
-            <div className="text-sm text-muted-foreground">R:R Ratio</div>
-            <div className="text-lg font-semibold">{riskRewardRatio.toFixed(2)}:1</div>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Body */}
@@ -213,36 +225,50 @@ export function CopilotCard({
 
       {/* Footer - Action Buttons */}
       <div className="p-6 pt-0 flex gap-3">
-        <Button
-          onClick={onApprove}
-          disabled={isProcessing}
-          variant="glow"
-          size="lg"
-          className="flex-1 text-lg font-semibold"
-        >
-          {isProcessing ? (
-            <>
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              Processing...
-            </>
-          ) : (
-            <>
-              <CheckCircle className="w-5 h-5 mr-2" />
-              Approve Trade
-            </>
-          )}
-        </Button>
-        
-        <Button
-          onClick={onReject}
-          disabled={isProcessing}
-          variant="outline"
-          size="lg"
-          className="px-8"
-        >
-          <X className="w-5 h-5 mr-2" />
-          Reject
-        </Button>
+        {!isHold ? (
+          <>
+            <Button
+              onClick={onApprove}
+              disabled={isProcessing}
+              variant="glow"
+              size="lg"
+              className="flex-1 text-lg font-semibold"
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="w-5 h-5 mr-2" />
+                  Approve Trade
+                </>
+              )}
+            </Button>
+            
+            <Button
+              onClick={onReject}
+              disabled={isProcessing}
+              variant="outline"
+              size="lg"
+              className="px-8"
+            >
+              <X className="w-5 h-5 mr-2" />
+              Reject
+            </Button>
+          </>
+        ) : (
+          <Button
+            onClick={onReject}
+            variant="default"
+            size="lg"
+            className="flex-1"
+          >
+            <CheckCircle className="w-5 h-5 mr-2" />
+            Acknowledge
+          </Button>
+        )}
       </div>
     </div>
   );

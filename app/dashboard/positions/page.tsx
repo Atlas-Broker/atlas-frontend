@@ -1,10 +1,11 @@
-import { getUserProfile } from '@/lib/permissions';
-import { getUserPositions } from '@/lib/supabase';
+import { getUserProfile } from '@/lib/supabase/permissions';
+import { getUserPositions } from '@/lib/supabase/queries';
+import type { Position } from '@/lib/supabase/models';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { EmptyState, EmptyIcon } from '@/components/shared/EmptyState';
-import { formatCurrency, formatPercentage, getPnLColor, calculatePercentageChange } from '@/lib/utils';
+import { formatCurrency, formatPercentage, getPnLColor, calculatePercentageChange } from '@/lib/shared/utils';
 
 export default async function PositionsPage() {
   const profile = await getUserProfile();

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { EnvironmentBadge } from './EnvironmentBadge';
-import type { EnvironmentType } from '@/lib/supabase';
+import type { EnvironmentType } from '@/lib/supabase/models';
 
 export interface NavbarProps {
   title?: string;

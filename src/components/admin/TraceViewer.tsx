@@ -12,7 +12,7 @@ import { useState, useEffect } from 'react';
 import { X, Copy, CheckCircle, Clock, Database } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { formatDateTime } from '@/lib/utils';
+import { formatDateTime } from '@/lib/shared/utils';
 
 interface TraceViewerProps {
   agentRunId: string;

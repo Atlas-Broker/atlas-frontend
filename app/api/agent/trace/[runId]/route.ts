@@ -7,8 +7,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { getAgentRun } from '@/lib/mongodb';
-import { getUserProfile } from '@/lib/permissions';
+import { getAgentRun } from '@/lib/mongodb/queries';
+import { getUserProfile } from '@/lib/supabase/permissions';
 
 export async function GET(
   request: NextRequest,

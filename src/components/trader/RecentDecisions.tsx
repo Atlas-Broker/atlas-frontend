@@ -11,7 +11,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Clock, CheckCircle, XCircle, TrendingUp } from 'lucide-react';
 import { Badge } from '../ui/badge';
-import { formatCurrency, formatDateTime } from '@/lib/utils';
+import { formatCurrency, formatDateTime } from '@/lib/shared/utils';
 
 interface Decision {
   id: string;

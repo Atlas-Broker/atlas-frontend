@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { ChevronDown, ChevronUp, TrendingUp, AlertTriangle, ExternalLink, CheckCircle, X, Loader2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency } from '@/lib/shared/utils';
 
 interface CopilotCardProps {
   proposal: {

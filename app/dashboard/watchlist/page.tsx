@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Modal } from '@/components/ui/modal';
 import { EmptyState, EmptyIcon } from '@/components/shared/EmptyState';
-import { isValidSymbol, formatDateTime } from '@/lib/utils';
+import { isValidSymbol, formatDateTime } from '@/lib/shared/utils';
 
 type Watchlist = {
   id: string;

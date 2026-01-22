@@ -1,12 +1,13 @@
-import { getUserProfile } from '@/lib/permissions';
-import { getUserOrders } from '@/lib/supabase';
+import { getUserProfile } from '@/lib/supabase/permissions';
+import { getUserOrders } from '@/lib/supabase/queries';
+import type { Order } from '@/lib/supabase/models';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { EmptyState, EmptyIcon } from '@/components/shared/EmptyState';
-import { formatCurrency, formatDateTime, getOrderStatusColor, toTitleCase } from '@/lib/utils';
-import type { OrderStatus } from '@/lib/supabase';
+import { formatCurrency, formatDateTime, getOrderStatusColor, toTitleCase } from '@/lib/shared/utils';
+import type { OrderStatus } from '@/lib/supabase/models';
 
 // Extract OrdersTable component outside of render
 function OrdersTable({ orders }: { orders: Awaited<ReturnType<typeof getUserOrders>> }) {

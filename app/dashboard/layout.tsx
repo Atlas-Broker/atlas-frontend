@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
-import { getUserProfile } from '@/lib/permissions';
+import { getUserProfile } from '@/lib/supabase/permissions';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Badge } from '@/components/ui/badge';
 import { LayoutDashboard, List, TrendingUp, Settings, FileText, TrendingDown } from 'lucide-react';

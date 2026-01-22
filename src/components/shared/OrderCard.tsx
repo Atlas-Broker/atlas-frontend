@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import type { Order } from '@/lib/supabase';
-import { formatCurrency, formatDateTime, getOrderStatusColor, toTitleCase } from '@/lib/utils';
+import type { Order } from '@/lib/supabase/models';
+import { formatCurrency, formatDateTime, getOrderStatusColor, toTitleCase } from '@/lib/shared/utils';
 
 export interface OrderCardProps {
   order: Order;

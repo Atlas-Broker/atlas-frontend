@@ -11,9 +11,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { runOrchestratorAgent } from '@/lib/agent/orchestrator';
-import { saveAgentRun } from '@/lib/mongodb';
-import { getSupabaseAdmin } from '@/lib/supabase';
+import { runOrchestratorAgent } from '@/lib/gemini/agent';
+import { saveAgentRun } from '@/lib/mongodb/queries';
+import { getSupabaseAdmin } from '@/lib/supabase/admin';
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();

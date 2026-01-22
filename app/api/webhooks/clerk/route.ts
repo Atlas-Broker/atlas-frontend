@@ -1,7 +1,8 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
-import { supabaseAdmin, createAuditLog } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { createAuditLog } from '@/lib/supabase/queries';
 
 /**
  * Clerk Webhook Handler

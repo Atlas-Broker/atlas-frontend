@@ -1,9 +1,10 @@
-import { getAllUsers, getAllOrders, getRecentAuditLogs } from '@/lib/supabase';
+import type { Order, AuditLog, Profile } from '@/lib/supabase/models';
+import { getAllUsers, getAllOrders, getRecentAuditLogs } from '@/lib/supabase/queries';
 import { StatsCard } from '@/components/shared/StatsCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { formatDateTime, toTitleCase } from '@/lib/utils';
+import { formatDateTime, toTitleCase } from '@/lib/shared/utils';
 
 export default async function AdminDashboardPage() {
   const users = await getAllUsers();

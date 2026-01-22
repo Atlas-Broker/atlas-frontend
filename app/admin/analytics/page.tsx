@@ -1,4 +1,5 @@
-import { getAllOrders, getAllUsers } from '@/lib/supabase';
+import type { Order, Profile } from '@/lib/supabase/models';
+import { getAllOrders, getAllUsers } from '@/lib/supabase/queries';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';

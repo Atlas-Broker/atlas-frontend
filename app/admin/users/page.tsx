@@ -1,9 +1,10 @@
-import { getAllUsers } from '@/lib/supabase';
+import type { Profile } from '@/lib/supabase/models';
+import { getAllUsers } from '@/lib/supabase/queries';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { RoleBadge } from '@/components/shared/RoleBadge';
 import { Badge } from '@/components/ui/badge';
-import { formatDateTime } from '@/lib/utils';
+import { formatDateTime } from '@/lib/shared/utils';
 
 export default async function AdminUsersPage() {
   const users = await getAllUsers();

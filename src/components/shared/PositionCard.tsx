@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import type { Position } from '@/lib/supabase';
-import { formatCurrency, formatPercentage, getPnLColor, calculatePercentageChange } from '@/lib/utils';
+import type { Position } from '@/lib/supabase/models';
+import { formatCurrency, formatPercentage, getPnLColor, calculatePercentageChange } from '@/lib/shared/utils';
 
 export interface PositionCardProps {
   position: Position;

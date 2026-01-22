@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
-import { isSuperAdmin } from '@/lib/permissions';
+import { isSuperAdmin } from '@/lib/supabase/permissions';
 import { Badge } from '@/components/ui/badge';
 
 export default async function SuperAdminLayout({

@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
-import type { EnvironmentType } from '@/lib/supabase';
-import { getEnvironmentBadgeColor } from '@/lib/utils';
+import type { EnvironmentType } from '@/lib/supabase/models';
+import { getEnvironmentBadgeColor } from '@/lib/shared/utils';
 
 export interface EnvironmentBadgeProps {
   environment: EnvironmentType;

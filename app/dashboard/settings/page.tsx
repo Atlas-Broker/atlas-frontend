@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { getAutonomyLevelLabel, getAutonomyLevelDescription } from '@/lib/utils';
+import { getAutonomyLevelLabel, getAutonomyLevelDescription } from '@/lib/shared/utils';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({

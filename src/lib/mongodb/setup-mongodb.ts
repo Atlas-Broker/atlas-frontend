@@ -5,7 +5,7 @@
  * Usage: npx tsx scripts/setup-mongodb.ts
  */
 
-import { initializeMongoCollections } from '../src/lib/mongodb';
+import { initializeMongoCollections } from './client';
 
 async function setup() {
   console.log('🚀 Initializing MongoDB collections...\n');

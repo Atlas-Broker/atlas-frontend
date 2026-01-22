@@ -1,11 +1,12 @@
-import { getAllUsers } from '@/lib/supabase';
+import type { Profile } from '@/lib/supabase/models';
+import { getAllUsers } from '@/lib/supabase/queries';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
 import { RoleBadge } from '@/components/shared/RoleBadge';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { formatDateTime } from '@/lib/utils';
+import { formatDateTime } from '@/lib/shared/utils';
 
 export default async function SuperAdminDashboardPage() {
   const users = await getAllUsers();

@@ -58,7 +58,7 @@ export default async function AdminUsersPage() {
                         {formatDateTime(user.created_at)}
                       </TableCell>
                       <TableCell className="text-sm text-gray-500 font-mono">
-                        {user.clerk_id.substring(0, 12)}...
+                        {user.clerk_id ? `${user.clerk_id.substring(0, 12)}...` : 'System'}
                       </TableCell>
                     </TableRow>
                   ))

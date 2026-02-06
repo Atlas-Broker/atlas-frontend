@@ -1,193 +1,154 @@
-# 📚 Atlas Knowledge Base - Documentation Index
+# 📚 Atlas Frontend - Documentation Index
 
-Welcome to the Atlas project documentation! This folder contains all technical documentation, guides, and references for the AI-powered swing trading platform.
+**Next.js 14+ React Frontend with Competition Landing Page**
 
 ---
 
 ## 📖 Documentation Structure
 
-### **Getting Started**
-1. **[02_SETUP.md](./02_SETUP.md)** ⚙️
-   - Complete setup and installation guide
-   - Environment configuration
-   - Database migrations
-   - Clerk authentication setup
-   - First-time deployment instructions
+### **01. [INDEX.md](./01_INDEX.md)** 📍
+Navigation hub for all frontend documentation.
 
-2. **[03_QUICK_START.md](./03_QUICK_START.md)** 🚀
-   - Quick start guide (5 minutes)
-   - How to view the new design
-   - Common issues and solutions
-   - Dev server commands
+### **02. [SETUP.md](./02_SETUP.md)** ⚙️
+Complete setup instructions:
+- Node.js and npm installation
+- Environment configuration
+- Running dev server
+- Building for production
 
----
+### **03. [DESIGN_SYSTEM.md](./03_DESIGN_SYSTEM.md)** 🎨
+UI/UX design system:
+- Color palette and theming
+- Component library (shadcn/ui)
+- Typography and spacing
+- Dark mode support
 
-### **Design & Theming**
-3. **[04_DESIGN_SYSTEM.md](./04_DESIGN_SYSTEM.md)** 🎨
-   - Complete design system reference
-   - MooMoo Orange color palette
-   - Component library documentation
-   - Usage examples and code snippets
-   - Custom utilities and effects
-   - Accessibility guidelines
-   - **Use this as your design reference!**
-
-4. **[05_THEME_IMPLEMENTATION.md](./05_THEME_IMPLEMENTATION.md)** 🛠️
-   - Technical implementation details
-   - What was installed and configured
-   - Tailwind CSS v4 setup
-   - Component architecture
-   - File structure
-
-5. **[06_THEME_UPDATES.md](./06_THEME_UPDATES.md)** ✨
-   - Latest premium theme updates
-   - Light/dark mode fixes
-   - Visual enhancements and WOW factor
-   - AI-focused design elements
-   - Before/after comparisons
+### **04. [AGENT_COMPETITION.md](./04_AGENT_COMPETITION.md)** 🏆
+AI Agent Competition landing page:
+- Performance chart component
+- Leaderboard component
+- Agent cards with portfolio
+- Explainable AI reasoning panel
+- Mock data for development
 
 ---
 
-### **Project Overview**
-6. **[07_PROJECT_SUMMARY.md](./07_PROJECT_SUMMARY.md)** 📋
-   - High-level project overview
-   - Technology stack
-   - Architecture and features
-   - Project status and roadmap
+## 🎯 Quick Navigation
 
----
-
-## 🎯 Quick Reference
-
-### **I want to...**
-
-| Goal | Document |
-|------|----------|
-| Set up the project from scratch | [02_SETUP.md](./02_SETUP.md) |
-| Start development quickly | [03_QUICK_START.md](./03_QUICK_START.md) |
-| Find component examples | [04_DESIGN_SYSTEM.md](./04_DESIGN_SYSTEM.md) |
-| Understand the tech stack | [05_THEME_IMPLEMENTATION.md](./05_THEME_IMPLEMENTATION.md) |
-| See what's new | [06_THEME_UPDATES.md](./06_THEME_UPDATES.md) |
-| Get project overview | [07_PROJECT_SUMMARY.md](./07_PROJECT_SUMMARY.md) |
-
----
-
-## 🔥 Most Important Docs
-
-### **For Developers:**
-1. **[04_DESIGN_SYSTEM.md](./04_DESIGN_SYSTEM.md)** - Your go-to reference for all components
-2. **[03_QUICK_START.md](./03_QUICK_START.md)** - Get up and running fast
-3. **[06_THEME_UPDATES.md](./06_THEME_UPDATES.md)** - Latest features and improvements
-
-### **For Setup:**
-1. **[02_SETUP.md](./02_SETUP.md)** - Complete installation guide
-2. **[03_QUICK_START.md](./03_QUICK_START.md)** - Quick testing and verification
-
-### **For Project Management:**
-1. **[07_PROJECT_SUMMARY.md](./07_PROJECT_SUMMARY.md)** - Project overview
-2. **[05_THEME_IMPLEMENTATION.md](./05_THEME_IMPLEMENTATION.md)** - Technical details
-
----
-
-## 🎨 Design System Highlights
-
-### **MooMoo Orange Theme**
-- **Primary**: `#FF6B00` (Light) / `#FF7A1A` (Dark)
-- **Components**: Button, Card, Badge, Alert, Theme Toggle
-- **Effects**: Glass morphism, orange glows, AI animations
-- **Modes**: Premium light and dark themes
-
-### **Key Utilities**
-```tsx
-.glass-card          // Frosted glass effect
-.gradient-orange     // Orange gradient text
-.glow-orange         // Orange glow shadow
-.ai-glow            // Rotating AI animation
-.stat-card          // Premium stat display
-.neon-border        // Glowing orange border
-```
+| I want to... | Document |
+|--------------|----------|
+| **Set up from scratch** | [02_SETUP.md](./02_SETUP.md) |
+| **Understand UI design** | [03_DESIGN_SYSTEM.md](./03_DESIGN_SYSTEM.md) |
+| **Competition components** | [04_AGENT_COMPETITION.md](./04_AGENT_COMPETITION.md) |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-atlas/
-├── doc/                    # 📚 You are here
-│   ├── 01_INDEX.md        # This file
-│   ├── 02_SETUP.md
-│   ├── 03_QUICK_START.md
-│   ├── 04_DESIGN_SYSTEM.md
-│   ├── 05_THEME_IMPLEMENTATION.md
-│   ├── 06_THEME_UPDATES.md
-│   └── 07_PROJECT_SUMMARY.md
-├── app/                   # Next.js app directory
-├── src/                   # Components and utilities
-├── supabase/             # Database migrations
-└── README.md             # Main project README
+atlas-frontend/
+├── doc/                              # Documentation (you are here)
+│   ├── 01_INDEX.md                  # This file
+│   ├── 02_SETUP.md                  # Setup guide
+│   ├── 03_DESIGN_SYSTEM.md          # Design system
+│   └── 04_AGENT_COMPETITION.md      # Competition page
+├── app/
+│   ├── page.tsx                      # Homepage (Competition!)
+│   ├── about/page.tsx                # About platform
+│   ├── dashboard/                    # User dashboard
+│   ├── admin/                        # Admin panels
+│   ├── api/                          # API routes
+│   └── globals.css
+├── src/
+│   ├── components/
+│   │   ├── competition/              # Competition components
+│   │   │   ├── PerformanceChart.tsx
+│   │   │   ├── Leaderboard.tsx
+│   │   │   ├── AgentCard.tsx
+│   │   │   └── ReasoningPanel.tsx
+│   │   └── ui/                       # shadcn/ui components
+│   └── lib/
+│       ├── api/
+│       │   └── competition.ts        # Competition API client
+│       ├── supabase/
+│       └── gemini/
+├── env.template
+└── package.json
 ```
 
 ---
 
-## 🚀 Quick Commands
+## 🚀 Quick Start
 
 ```bash
-# Start development server
+# 1. Install dependencies
+npm install
+
+# 2. Configure environment
+cp env.template .env.local
+# Edit .env.local with your credentials
+
+# 3. Enable mock data (optional, if backend not running)
+# In .env.local:
+NEXT_PUBLIC_USE_MOCK_DATA=true
+
+# 4. Start dev server
 npm run dev
 
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Run linter
-npm run lint
+# 5. Visit
+http://localhost:3000  # Competition homepage!
 ```
 
----
-
-## 🎓 Learning Path
-
-### **Day 1: Setup & Basics**
-1. Read [02_SETUP.md](./02_SETUP.md)
-2. Follow setup instructions
-3. Run dev server
-4. Read [03_QUICK_START.md](./03_QUICK_START.md)
-
-### **Day 2: Design System**
-1. Read [04_DESIGN_SYSTEM.md](./04_DESIGN_SYSTEM.md)
-2. Visit `/showcase` page
-3. Test light/dark modes
-4. Explore component examples
-
-### **Day 3: Development**
-1. Read [05_THEME_IMPLEMENTATION.md](./05_THEME_IMPLEMENTATION.md)
-2. Review [06_THEME_UPDATES.md](./06_THEME_UPDATES.md)
-3. Start building features
-4. Reference design system as needed
+**Full guide:** [02_SETUP.md](./02_SETUP.md)
 
 ---
 
-## 📞 Need Help?
+## 🏆 Homepage: AI Competition
 
-- **Component examples?** → [04_DESIGN_SYSTEM.md](./04_DESIGN_SYSTEM.md)
-- **Setup issues?** → [02_SETUP.md](./02_SETUP.md)
-- **Quick fix?** → [03_QUICK_START.md](./03_QUICK_START.md)
-- **Latest updates?** → [06_THEME_UPDATES.md](./06_THEME_UPDATES.md)
+**The competition page IS the homepage!**
 
----
+Visitors immediately see:
+- 📈 Live performance charts (log scale)
+- 🏆 Real-time leaderboard with rankings
+- 🤖 Agent cards with expandable portfolios
+- 🧠 Explainable AI reasoning panel
 
-## 🎯 Next Steps
+**No sign-up required** - Full public access for maximum WOW factor!
 
-1. ✅ Documentation is organized
-2. ✅ Design system is complete
-3. ✅ Premium theme implemented
-4. 🚀 Start building features!
+**Technical details:** [04_AGENT_COMPETITION.md](./04_AGENT_COMPETITION.md)
 
 ---
 
-**Last Updated:** January 21, 2026  
-**Version:** 1.0  
-**Project:** Atlas AI Trading Platform
+## 🎨 Key Features
 
+✅ **Competition Homepage** - Public landing page with charts  
+✅ **Mock Data Support** - Works without backend  
+✅ **User Dashboard** - Authenticated user area  
+✅ **Admin Panels** - User management, analytics  
+✅ **Dark Mode** - Full theme support  
+✅ **Responsive Design** - Mobile & desktop optimized  
+
+---
+
+## 📚 Related Documentation
+
+- **Organization Docs:** [.github/doc/](../../.github/doc/) - System architecture
+- **Database Docs:** [atlas-database/doc/](../../atlas-database/doc/) - Schema reference
+- **Backend Docs:** [atlas-backend/doc/](../../atlas-backend/doc/) - API documentation
+
+---
+
+## 🔧 Development Tips
+
+### Mock Data Mode
+Set `NEXT_PUBLIC_USE_MOCK_DATA=true` to develop frontend without backend running.
+
+### Build Validation
+Always run `npm run build` before committing to ensure production readiness.
+
+### Hot Reload
+Dev server (`npm run dev`) auto-reloads on file changes.
+
+---
+
+**Ready to build beautiful UIs? Let's go! 🎨**

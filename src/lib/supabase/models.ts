@@ -235,3 +235,124 @@ export function isPendingOrder(order: Order): boolean {
   return ['proposed', 'approved', 'submitted'].includes(order.status);
 }
 
+// ============================================
+// AGENT COMPETITION TYPES
+// ============================================
+
+// agent_competitors table
+export interface AgentCompetitor {
+  id: string; // UUID
+  name: string;
+  model_id: string;
+  description: string | null;
+  initial_capital: number;
+  current_equity: number;
+  total_return: number;
+  sharpe_ratio: number | null;
+  max_drawdown: number | null;
+  win_rate: number | null;
+  total_trades: number;
+  is_active: boolean;
+  started_at: string; // ISO datetime
+  last_trade_at: string | null; // ISO datetime
+  created_at: string; // ISO datetime
+  updated_at: string; // ISO datetime
+}
+
+// agent_daily_performance table
+export interface AgentDailyPerformance {
+  id: string; // UUID
+  competitor_id: string; // UUID
+  trading_date: string; // ISO date
+  equity: number;
+  cash: number;
+  positions_value: number;
+  daily_return: number | null;
+  cumulative_return: number | null;
+  trades_today: number;
+  created_at: string; // ISO datetime
+}
+
+// agent_positions table
+export interface AgentPosition {
+  id: string; // UUID
+  competitor_id: string; // UUID
+  symbol: string;
+  quantity: number;
+  avg_entry_price: number;
+  current_price: number | null;
+  unrealized_pnl: number | null;
+  cost_basis: number;
+  market_value: number | null;
+  weight: number | null;
+  opened_at: string; // ISO datetime
+  updated_at: string; // ISO datetime
+}
+
+// agent_trades table
+export interface AgentTrade {
+  id: string; // UUID
+  competitor_id: string; // UUID
+  symbol: string;
+  side: OrderSide;
+  quantity: number;
+  price: number;
+  total_amount: number;
+  reasoning_summary: string | null;
+  confidence_score: number | null;
+  executed_at: string; // ISO datetime
+  created_at: string; // ISO datetime
+}
+
+// agent_reasoning table
+export interface AgentReasoningDetail {
+  id: string; // UUID
+  competitor_id: string; // UUID
+  trade_id: string | null; // UUID
+  reasoning_type: string; // 'market_analysis', 'risk_assessment', 'decision'
+  content: string;
+  metadata: Record<string, any> | null;
+  created_at: string; // ISO datetime
+}
+
+// agent_leaderboard table
+export interface AgentLeaderboard {
+  id: string; // UUID
+  competitor_id: string; // UUID
+  ranking_date: string; // ISO date
+  rank: number;
+  equity: number;
+  total_return: number;
+  daily_return: number | null;
+  sharpe_ratio: number | null;
+  win_rate: number | null;
+  total_trades: number;
+  created_at: string; // ISO datetime
+}
+
+// ============================================
+// AGENT COMPETITION VIEW TYPES
+// ============================================
+
+// Combined leaderboard view with competitor info
+export interface LeaderboardEntry extends AgentLeaderboard {
+  competitor: AgentCompetitor;
+}
+
+// Agent performance with historical data
+export interface AgentPerformanceData {
+  competitor: AgentCompetitor;
+  daily_performance: AgentDailyPerformance[];
+  current_positions: AgentPosition[];
+  recent_trades: AgentTrade[];
+}
+
+// Portfolio details with reasoning
+export interface AgentPortfolioDetail {
+  competitor: AgentCompetitor;
+  positions: AgentPosition[];
+  reasoning: AgentReasoningDetail[];
+  total_market_value: number;
+  cash_balance: number;
+}
+
